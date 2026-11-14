@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: biznova
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # Free instances have no persistent disk: each start restores the fictional demo snapshot.
+    startCommand: mkdir -p instance && cp -n deploy/biznova_demo.sqlite instance/biznova_demo.sqlite; waitress-serve --host=0.0.0.0 --port=$PORT --threads=8 run:app
+    healthCheckPath: /auth/login
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: BIZNOVA_ENV
+        value: production
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: DEMO_MODE
+        value: "true"
+      - key: PROXY_FIX_HOPS
+        value: "1"
+      - key: SECRET_KEY
+        generateValue: true

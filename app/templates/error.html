@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% import '_ui.html' as ui with context %}
+{% block title %}{{ code }} · {{ title }}{% endblock %}
+{% block content %}
+<section class="error-page"><span class="error-code">{{ code }}</span><span class="icon-tile">{{ ui.icon('alert') }}</span><p class="eyebrow">LET’S GET YOU BACK ON TRACK</p><h1>{{ title }}</h1><p class="page-description">{{ message }}</p>{% if retryable %}<p class="muted">If you were saving a form, go back to your original form and retry there. Avoid resubmitting from this error page.</p>{% endif %}<div class="heading-actions">{% if retryable %}<button type="button" class="btn btn-secondary js-only" data-go-back>{{ ui.icon('back') }}Back to previous page</button>{% endif %}<a class="btn btn-primary" href="{{ '/' if current_user else '/auth/login' }}">{{ 'Back to overview' if current_user else 'Go to sign in' }}{{ ui.icon('arrow') }}</a></div></section>
+{% endblock %}

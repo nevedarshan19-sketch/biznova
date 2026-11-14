@@ -1,0 +1,80 @@
+{% macro icon(name, cls='') -%}
+<svg class="icon {{ cls }}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+{% if name == 'dashboard' %}<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="18" width="7" height="3" rx="1"/>
+{% elif name == 'box' %}<path d="m12 3 9 5v9l-9 5-9-5V8l9-5Z M3 8l9 5 9-5 M12 13v9 M7.5 5.5l9 5v5"/>
+{% elif name == 'sale' %}<path d="M7 3H4v18h16V3h-3 M9 3h6v4H9z M8 12h8 M8 16h5"/>
+{% elif name == 'purchase' %}<path d="M3 3h2l3 12h11l3-9H6 M9 6V3 M14 6V3"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
+{% elif name == 'expense' %}<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 9h18 M16 14h5 M7 5V3h11"/>
+{% elif name == 'report' %}<path d="M4 3v18h17 M8 16v-5 M13 16V7 M18 16V4"/>
+{% elif name == 'settings' %}<path d="M12 3v3 M12 18v3 M3 12h3 M18 12h3 M5.6 5.6l2.1 2.1 M16.3 16.3l2.1 2.1 M5.6 18.4l2.1-2.1 M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+{% elif name == 'plus' %}<path d="M12 5v14 M5 12h14"/>
+{% elif name == 'arrow' %}<path d="M5 12h14 M14 6l6 6-6 6"/>
+{% elif name == 'back' %}<path d="M19 12H5 M10 6l-6 6 6 6"/>
+{% elif name == 'up' %}<path d="m5 16 6-6 4 4 6-9 M15 5h6v6"/>
+{% elif name == 'down' %}<path d="m5 8 6 6 4-4 6 9 M15 19h6v-6"/>
+{% elif name == 'search' %}<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>
+{% elif name == 'check' %}<path d="m5 12 4 4L19 6"/>
+{% elif name == 'alert' %}<path d="m12 3 10 18H2L12 3Z M12 9v5 M12 17h.01"/>
+{% elif name == 'close' %}<path d="m6 6 12 12 M6 18 18 6"/>
+{% elif name == 'menu' %}<path d="M4 6h16 M4 12h16 M4 18h16"/>
+{% elif name == 'logout' %}<path d="M10 4H4v16h6 M9 12h12 M16 7l5 5-5 5"/>
+{% elif name == 'download' %}<path d="M12 3v12 M7 10l5 5 5-5 M4 16v5h16v-5"/>
+{% elif name == 'print' %}<path d="M7 8V3h10v5 M7 17H3V8h18v9h-4 M7 14h10v7H7z M17 11h.01"/>
+{% elif name == 'moon' %}<path d="M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z"/>
+{% elif name == 'calendar' %}<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4 M17 3v4 M3 11h18 M8 15h2 M14 15h2"/>
+{% elif name == 'edit' %}<path d="m15 4 5 5 M4 20l5-1L21 7l-5-5L4 14v6Z"/>
+{% elif name == 'shield' %}<path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z m-4 9 3 3 5-6"/>
+{% else %}<circle cx="12" cy="12" r="9"/><path d="M12 11v6 M12 7h.01"/>{% endif %}
+</svg>
+{%- endmacro %}
+
+{% macro csrf() -%}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{%- endmacro %}
+{% macro field_id(name) -%}{{ name|replace('[','-')|replace(']','')|replace('.','-') }}{%- endmacro %}
+{% macro error(name) -%}
+{% set message = (errors|default({})).get(name) %}{% if message %}<p class="field-error" id="{{ field_id(name) }}-error">{{ message if message is string else message|join(' ') }}</p>{% endif %}
+{%- endmacro %}
+{% macro error_attrs(name, hint=false) -%}
+{% if (errors|default({})).get(name) %}aria-invalid="true" aria-describedby="{{ field_id(name) }}-error{% if hint %} {{ field_id(name) }}-hint{% endif %}"{% elif hint %}aria-describedby="{{ field_id(name) }}-hint"{% endif %}
+{%- endmacro %}
+{% macro input(name, label, type='text', required=false, value=none, hint='', placeholder='', maxlength=none, min=none, max=none, step=none, autocomplete=none, inputmode=none, error_key=none, list=none, minlength=none) -%}
+{% set key = error_key or name %}
+<div class="field">
+<label for="{{ field_id(key) }}">{{ label }}{% if required %} <span class="required" aria-hidden="true">*</span>{% endif %}</label>
+<input id="{{ field_id(key) }}" name="{{ name }}" type="{{ type }}" value="{{ (form|default({})).get(name, '') if value is none else value }}" {% if required %}required{% endif %} {% if placeholder %}placeholder="{{ placeholder }}"{% endif %} {% if maxlength is not none %}maxlength="{{ maxlength }}"{% endif %} {% if minlength is not none %}minlength="{{ minlength }}"{% endif %} {% if min is not none %}min="{{ min }}"{% endif %} {% if max is not none %}max="{{ max }}"{% endif %} {% if step is not none %}step="{{ step }}"{% endif %} {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %} {% if inputmode %}inputmode="{{ inputmode }}"{% endif %} {% if list %}list="{{ list }}"{% endif %} {{ error_attrs(key, hint) }}>
+{% if hint %}<p class="hint" id="{{ field_id(key) }}-hint">{{ hint }}</p>{% endif %}{{ error(key) }}
+</div>
+{%- endmacro %}
+{% macro textarea(name, label, required=false, maxlength=500, hint='', value=none, minlength=none) -%}
+<div class="field"><label for="{{ field_id(name) }}">{{ label }}{% if required %} <span class="required" aria-hidden="true">*</span>{% endif %}</label><textarea id="{{ field_id(name) }}" name="{{ name }}" rows="3" maxlength="{{ maxlength }}" {% if required %}required{% endif %} {% if minlength %}minlength="{{ minlength }}"{% endif %} {{ error_attrs(name, hint) }}>{{ (form|default({})).get(name, '') if value is none else value }}</textarea>{% if hint %}<p class="hint" id="{{ field_id(name) }}-hint">{{ hint }}</p>{% endif %}{{ error(name) }}</div>
+{%- endmacro %}
+{% macro error_summary() -%}
+{% if errors|default({}) %}<section class="notice notice-error error-summary" role="alert" tabindex="-1" data-error-summary aria-labelledby="error-summary-title"><div>{{ icon('alert') }}</div><div><h2 id="error-summary-title">Please check the following</h2><ul>{% for key, message in errors.items() %}<li>{% if key not in ['_form', 'csrf_token', 'idempotency_key', 'expected_stock'] %}<a href="#{{ field_id(key) }}">{{ message if message is string else message|join(' ') }}</a>{% else %}{{ message if message is string else message|join(' ') }}{% endif %}</li>{% endfor %}</ul></div></section>{% endif %}
+{%- endmacro %}
+{% macro status(value) -%}<span class="badge {% if value in ['voided', 'archived'] %}badge-neutral{% elif value in ['out', 'Out of stock'] %}badge-danger{% elif value in ['low', 'Low stock'] %}badge-warning{% else %}badge-success{% endif %}"><span class="status-dot"></span>{{ {'out':'Out of stock', 'low':'Low stock', 'in':'In stock'}.get(value, value|replace('_',' ')|capitalize) }}</span>{%- endmacro %}
+{% macro stock(product) -%}{{ status('archived' if product.is_archived else ('out' if product.current_stock <= 0 else ('low' if product.current_stock <= product.low_stock_threshold else 'in'))) }}{%- endmacro %}
+{% macro empty(title, text, href='', action='') -%}
+<div class="empty-state"><span class="empty-icon">{{ icon('box') }}</span><h3>{{ title }}</h3><p>{{ text }}</p>{% if href %}<a class="btn btn-primary" href="{{ href }}">{{ icon('plus') }}{{ action }}</a>{% endif %}</div>
+{%- endmacro %}
+{% macro period_fields() -%}
+<div class="field period-choice"><label for="period">Date range</label><select name="period" id="period" data-period {{ error_attrs('period') }}>{% for key, label in period_options.items() %}<option value="{{ key }}" {% if request.args.get('period', period.key) == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>{{ error('period') }}</div>
+<div class="custom-dates" data-custom-dates>{{ input('from', 'From', 'date', value=request.args.get('from', period.start|string)) }}{{ input('to', 'To', 'date', value=request.args.get('to', period.end|string)) }}</div>
+{%- endmacro %}
+{% macro period_filter() -%}<form method="get" class="filter-bar period-filter no-print">{{ period_fields() }}<button class="btn btn-secondary" type="submit">Apply range</button></form>{%- endmacro %}
+{% macro pagination_nav(pagination) -%}
+{% if pagination.pages > 1 %}<nav class="pagination" aria-label="Pagination"><p class="muted">Page {{ pagination.page }} of {{ pagination.pages }} <span class="pagination-total">· {{ pagination.total }} records</span></p><div class="pagination-links">{% if pagination.has_prev %}{% set q = request.args.to_dict() %}{% set _ = q.update({'page':pagination.prev_num}) %}<a class="btn btn-secondary btn-small" href="{{ request.path }}?{{ q|urlencode }}" aria-label="Previous page">{{ icon('back') }}<span>Previous</span></a>{% endif %}{% if pagination.has_next %}{% set q = request.args.to_dict() %}{% set _ = q.update({'page':pagination.next_num}) %}<a class="btn btn-secondary btn-small" href="{{ request.path }}?{{ q|urlencode }}" aria-label="Next page"><span>Next</span>{{ icon('arrow') }}</a>{% endif %}</div></nav>{% endif %}
+{%- endmacro %}
+{% macro audit(events) -%}
+<section class="card"><div class="card-heading"><div><p class="eyebrow">Accountability</p><h2>Activity history</h2></div>{{ icon('shield') }}</div>{% if events %}<ol class="timeline">{% for event in events %}<li><span class="timeline-dot"></span><div><p>{{ event.summary }}</p><small class="muted">{{ event.created_at|localtime }} · {{ event.event_type|replace('.', ' / ')|replace('_', ' ') }}</small></div></li>{% endfor %}</ol>{% else %}<p class="muted card-copy">No activity recorded yet.</p>{% endif %}</section>
+{%- endmacro %}
+{% macro void_dialog(action, label, effect) -%}
+<dialog open id="void-dialog" class="confirm-dialog no-print" data-modal {% if (errors|default({})) and request.path.endswith('/void') %}data-reopen{% endif %} aria-labelledby="void-title" aria-describedby="void-description"><div class="dialog-heading"><span class="icon-tile danger-tile">{{ icon('alert') }}</span><button type="button" class="icon-button js-only" data-close-dialog aria-label="Close confirmation">{{ icon('close') }}</button></div><h2 id="void-title">Void this {{ label }}?</h2><p class="muted" id="void-description">{{ effect }} This cannot be undone. The original record stays in your history.</p><form method="post" action="{{ action }}" data-async>{{ csrf() }}{{ textarea('reason', 'Reason for voiding', required=true, maxlength=300, minlength=3, hint='At least 3 characters. This reason is saved in the audit trail.') }}{% if (errors|default({})).get('_form') %}<p class="field-error">{{ errors['_form'] }}</p>{% endif %}<div class="form-actions"><button class="btn btn-secondary js-only" type="button" data-close-dialog>Keep {{ label }}</button><button class="btn btn-danger" type="submit" data-loading-label="Voiding…">Void {{ label }}</button></div></form></dialog>
+{%- endmacro %}
+{% macro export_link(kind, label, period) -%}<a class="btn btn-secondary btn-small" href="/reports/export/{{ kind }}?period=custom&amp;from={{ period.start }}&amp;to={{ period.end }}">{{ icon('download') }}{{ label }}</a>{%- endmacro %}
+{% macro trend(series, graph_id='revenue-trend') -%}
+{% if series %}{% set high = series|map(attribute='value_paise')|max %}{% set scale = high if high > 0 else 1 %}{% set count = series|length %}
+<div class="trend-scale"><span>{{ high|money }}</span><span>Daily revenue</span></div>
+<svg class="trend-chart" viewBox="0 0 720 200" preserveAspectRatio="none" role="img" aria-labelledby="{{ graph_id }}-title {{ graph_id }}-desc"><title id="{{ graph_id }}-title">Daily sales revenue</title><desc id="{{ graph_id }}-desc">{{ series[0].date }} to {{ series[-1].date }}. Daily values are available in the table below. Voided sales are excluded.</desc><defs><linearGradient id="{{ graph_id }}-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity=".24"/><stop offset="100%" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs><g class="chart-grid"><path d="M8 12h704 M8 68h704 M8 124h704 M8 180h704"/></g>
+{% if count > 1 %}<path fill="url(#{{ graph_id }}-fill)" d="M8 180 {% for point in series %}L{{ 8 + loop.index0 * 704 / (count - 1) }} {{ 180 - point.value_paise * 168 / scale }} {% endfor %}L712 180Z"/><polyline class="chart-line" points="{% for point in series %}{{ 8 + loop.index0 * 704 / (count - 1) }},{{ 180 - point.value_paise * 168 / scale }} {% endfor %}"/>{% else %}<path class="chart-line" d="M8 {{ 180 - series[0].value_paise * 168 / scale }}H712"/><circle cx="360" cy="{{ 180 - series[0].value_paise * 168 / scale }}" r="4" fill="currentColor"/>{% endif %}</svg><div class="chart-axis"><span>{{ series[0].date }}</span><span>{{ 0|money }}</span><span>{{ series[-1].date }}</span></div>
+<details class="chart-data"><summary>View daily values <span class="muted">({{ count }} {{ 'day' if count == 1 else 'days' }})</span></summary><div class="table-scroll" tabindex="0" role="region" aria-label="Daily revenue values"><table><caption class="sr-only">Sales revenue by business date</caption><thead><tr><th scope="col">Date</th><th scope="col" class="numeric">Revenue</th></tr></thead><tbody>{% for point in series %}<tr><th scope="row">{{ point.date }}</th><td class="numeric">{{ point.value_paise|money }}</td></tr>{% endfor %}</tbody></table></div></details>
+{% else %}{{ empty('No revenue data in this range', 'Choose another date range or record your first sale.', '/sales/new', 'Record sale') }}{% endif %}
+{%- endmacro %}
