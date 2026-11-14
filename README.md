@@ -1,5 +1,7 @@
 # BizNova
 
+**Live demo:** https://biznova-k4te.onrender.com — fictional demo data, free Render plan (see [Render deployment](#render-deployment)).
+
 A local, single-owner small-business ledger: products, whole-unit inventory, sales, purchases, expenses, period reports and CSV exports. Flask, SQLAlchemy and SQLite provide the server; the UI is server-rendered.
 
 **Local use only.** Bind to `127.0.0.1`; do not expose this application to the Internet, a public tunnel or an untrusted LAN. It is not a multi-tenant accounting system, tax engine, payment processor or audited financial product. Recorded cash flow is **sales revenue − purchase spending − expenses**, not profit.
@@ -68,6 +70,18 @@ cloudflared tunnel --no-autoupdate --url http://127.0.0.1:5001
 ```
 
 The printed `https://….trycloudflare.com` address works only while this computer is awake and both commands run; it changes on every restart. Anyone with the link reaches the sign-in page, so use fictional demo data only and stop the tunnel (Ctrl+C) after the demo.
+
+## Render deployment
+
+[`render.yaml`](render.yaml) defines one free Python web service that runs Waitress with production settings: secure cookies, generated `SECRET_KEY`, `PROXY_FIX_HOPS=1` so each visitor's real IP is used for login limiting and HTTPS is detected, and `DEMO_MODE=true`.
+
+To redeploy, push to `main` in the connected GitHub repository; the Blueprint syncs and rebuilds automatically. On first start the service copies the fictional snapshot `deploy/biznova_demo.sqlite` (12 products, 30 sales, 3 purchases, 5 expenses) into `instance/`.
+
+Free-plan behaviour to plan around:
+
+- There is no persistent disk. Every restart — including waking from the 15-minute idle sleep — restores that snapshot, so demo changes are temporary.
+- A cold first request can take 30–60 seconds while the instance wakes.
+- The in-process login limiter is per instance; this is a single-instance demo, not a production security design.
 
 ## Configuration
 
