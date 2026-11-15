@@ -154,10 +154,11 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 24px 0; }
 .notice a { color: inherit; font-weight: 600; text-decoration: underline; }
 .notice ul { margin: 4px 0; padding-left: 17px; }
 .notice li + li { margin-top: 4px; }
-.demo-banner { background: var(--warning-soft); color: var(--warning); border: 1px solid color-mix(in srgb, var(--warning) 20%, transparent); border-radius: 8px; font-size: 11px; padding: 10px 14px; margin-bottom: 20px; }
+.demo-banner { background: var(--surface-alt); color: var(--muted); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 11px; padding: 10px 14px; margin-bottom: 20px; }
 .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 5px; font-size: 10px; font-weight: 550; white-space: nowrap; line-height: 1.5; }
 .badge-success { background: var(--teal-soft); color: var(--teal); }
-.badge-warning, .badge-demo { background: var(--warning-soft); color: var(--warning); }
+.badge-warning { background: var(--warning-soft); color: var(--warning); }
+.badge-demo { background: var(--surface-alt); color: var(--muted); border: 1px solid var(--line); }
 .badge-danger { background: var(--danger-soft); color: var(--danger); }
 .badge-neutral { background: var(--surface-hover); color: var(--muted); }
 .status-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; display: inline-block; flex-shrink: 0; }
