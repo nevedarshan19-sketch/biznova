@@ -37,7 +37,8 @@ Recorded on 15 Nov 2026, macOS arm64, Python 3.14.8, SQLite 3.50.4, headless Chr
 | Migration drift | `flask --app run db check` | No new upgrade operations |
 | Ledger consistency (seeded demo) | `flask --app run reconcile-stock` | 12 products, 75 movements, no inconsistencies |
 | Backup and restore | `flask --app run backup …`, restore to a temporary copy | `integrity_check` ok, no foreign-key errors, 30 sales preserved |
+| Public Render demo | Chromium session against `https://biznova-k4te.onrender.com` | Landing, login, dashboard, segmented filters, quick add, billing header and 360px viewport verified with fictional data |
 
 Defects found and fixed during verification: CSRF time-limit type mismatch; password changes not revoking other sessions; non-atomic login rate limiting under concurrent attempts; a 101-line form losing input on rejection; oversized requests recursing in the error handler; a screen-reader-only label in tables causing horizontal page overflow on mobile; joined words in the responsive login headline; focus escaping the void dialog on Tab.
 
-Not verified: Windows setup commands, Safari/Firefox, physical printing, screen readers, and any public deployment (out of scope).
+Not verified: Windows setup commands, Safari/Firefox, physical printing and screen readers.

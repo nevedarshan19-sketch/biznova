@@ -4,7 +4,7 @@
 
 A local, single-owner small-business ledger: products, whole-unit inventory, sales, purchases, expenses, period reports and CSV exports. Flask, SQLAlchemy and SQLite provide the server; the UI is server-rendered.
 
-**Local use only.** Bind to `127.0.0.1`; do not expose this application to the Internet, a public tunnel or an untrusted LAN. It is not a multi-tenant accounting system, tax engine, payment processor or audited financial product. Recorded cash flow is **sales revenue − purchase spending − expenses**, not profit.
+**Run the local instance locally.** Bind your own instance to `127.0.0.1`; do not expose it to the Internet, an untrusted tunnel or a LAN. The separate free Render demo linked above is public by design and contains fictional data only. BizNova is not a multi-tenant accounting system, tax engine, payment processor or audited financial product. Recorded cash flow is **sales revenue − purchase spending − expenses**, not profit.
 
 ## Install and run
 
