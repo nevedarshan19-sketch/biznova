@@ -141,7 +141,7 @@ Windows:
 .\.venv\Scripts\python.exe -m pytest
 ```
 
-Tests create disposable file-backed databases via `create_app('testing', test_config)` and `db.create_all()` in fixtures. They do not run against your configured business database. The concurrency tests use real separate SQLite thread connections, not in-memory substitutes. The latest full local pytest run (macOS, Python 3.14.8, SQLite 3.50.4) completed with **153 passed**. This is a recorded run, not a claim about public-deployment readiness or future results.
+Tests create disposable file-backed databases via `create_app('testing', test_config)` and `db.create_all()` in fixtures. They do not run against your configured business database. The concurrency tests use real separate SQLite thread connections, not in-memory substitutes. The latest full local pytest run (macOS, Python 3.14.8, SQLite 3.50.4) completed with **155 passed**. This is a recorded run, not a claim about public-deployment readiness or future results.
 
 ### Browser acceptance check (optional)
 
@@ -151,7 +151,7 @@ Tests create disposable file-backed databases via `create_app('testing', test_co
 .venv/bin/python scripts/browser_qa.py
 ```
 
-The script starts its own temporary server and disposable database, drives headless Chromium through the main journey, and writes screenshots plus `browser-results.json` to `artifacts/` only when every step passes. The latest run passed all 12 steps: login, product, purchase, sale with discount, expense, dashboard totals, low stock, CSV export, both themes at 360/768/1440px without page overflow, mobile drawer and void dialogs (focus trap and Escape), server-unavailable and oversell failures that keep input and the retry key, and no JavaScript errors. Safari, Firefox, Windows and physical printing were not tested.
+The script starts its own temporary server and disposable database, drives headless Chromium through the main journey, and writes screenshots plus `browser-results.json` to `artifacts/` only when every step passes. The latest run passed all 15 steps: login, product, purchase, sale with discount, expense, dashboard totals, low stock, inventory segmented tabs, inline expense quick add, the billing line-item header, CSV export, both themes at 360/768/1440px without page overflow, mobile drawer and void dialogs (focus trap and Escape), server-unavailable and oversell failures that keep input and the retry key, and no JavaScript errors. Safari, Firefox, Windows and physical printing were not tested.
 
 ## Operating limits
 

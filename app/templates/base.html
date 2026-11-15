@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="BizNova — stock, sales, purchases and expenses for small businesses, in one clear workspace.">
   <script>
     (function () {
-      var preference = 'system';
-      try { preference = localStorage.getItem('biznova.theme') || 'system'; } catch (_) {}
-      if (!['light', 'dark', 'system'].includes(preference)) preference = 'system';
+      var preference = 'dark';
+      try { preference = localStorage.getItem('biznova.theme') || 'dark'; } catch (_) {}
+      if (!['light', 'dark', 'system'].includes(preference)) preference = 'dark';
       document.documentElement.dataset.themePreference = preference;
       document.documentElement.dataset.theme = preference === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : preference;
       document.documentElement.classList.add('js');
@@ -20,13 +21,13 @@
   {% block head %}{% endblock %}
 </head>
 {% import '_ui.html' as ui with context %}
-<body class="{% if not current_user %}auth-layout{% endif %}" data-currency="{{ business.currency if business else 'INR' }}">
+<body class="{% block body_class %}{% if not current_user %}auth-layout{% endif %}{% endblock %}" data-currency="{{ business.currency if business else 'INR' }}">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 {% if current_user %}
 <div class="drawer-backdrop" data-drawer-backdrop hidden></div>
 <aside class="sidebar no-print" id="sidebar" aria-label="Workspace navigation">
   <div class="sidebar-brand"><a class="brand" href="/" aria-label="BizNova home"><svg class="brand-mark" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M4 25V7h9c8 0 8 9 1 9H9m5 0c9 0 9 9 0 9H4" stroke="currentColor" stroke-width="3.5"/><path d="m21 3 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="#5CE1E6"/></svg><span>biz<span class="brand-nova">nova</span><span class="brand-period">.</span></span></a><button class="icon-button mobile-only js-only" type="button" data-close-drawer aria-label="Close navigation">{{ ui.icon('close') }}</button></div>
-  <div class="workspace-label"><span class="workspace-avatar">{{ (business.business_name or 'B')[:1]|upper }}</span><div><strong>{{ business.business_name }}</strong><small>Business workspace</small></div></div>
+  <div class="workspace-label"><span class="workspace-avatar">{{ (business.business_name or 'B')[:1]|upper }}</span><div><strong title="{{ business.business_name }}">{{ business.business_name }}</strong><small>Business workspace</small></div></div>
   <p class="nav-caption">WORKSPACE</p>
   <nav class="main-nav" aria-label="Main">
   {% for href, label, icon in [('/', 'Overview', 'dashboard'), ('/products', 'Products', 'box'), ('/sales', 'Sales', 'sale'), ('/purchases', 'Purchases', 'purchase'), ('/expenses', 'Expenses', 'expense'), ('/reports', 'Reports', 'report')] %}
@@ -39,7 +40,7 @@
 <div class="app-shell" id="app-shell">
   <header class="topbar no-print">
     <div class="topbar-start">{% if current_user %}<button class="icon-button mobile-only js-only" type="button" data-open-drawer aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">{{ ui.icon('menu') }}</button><span class="topbar-workspace">Your business, in focus<span class="accent-dot">.</span></span>{% else %}<a class="brand brand-compact" href="/">biz<span class="brand-nova">nova</span><span class="brand-period">.</span></a>{% endif %}</div>
-    <div class="topbar-actions">{% if demo_mode %}<span class="badge badge-demo">Demo workspace</span>{% endif %}<div class="theme-control">{{ ui.icon('moon') }}<label class="sr-only" for="header-theme">Color theme</label><select id="header-theme" data-theme-select aria-label="Color theme"><option value="light">Light</option><option value="dark">Dark</option><option value="system" selected>System</option></select></div></div>
+    <div class="topbar-actions">{% if demo_mode %}<span class="badge badge-demo">Demo workspace</span>{% endif %}<div class="theme-control">{{ ui.icon('moon') }}<label class="sr-only" for="header-theme">Color theme</label><select id="header-theme" data-theme-select aria-label="Color theme"><option value="light">Light</option><option value="dark" selected>Dark</option><option value="system">System</option></select></div></div>
   </header>
   <main id="main-content" class="main-content" tabindex="-1">
     {% if demo_mode %}<div class="demo-banner no-print">Demo mode · Explore the workspace without using real customer or sensitive business information.</div>{% endif %}

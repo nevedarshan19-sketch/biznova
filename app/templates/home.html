@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% import '_ui.html' as ui with context %}
+{% block title %}Smart business management{% endblock %}
+{% block body_class %}landing-layout{% endblock %}
+{% block content %}
+<div class="landing">
+  <nav class="landing-nav" aria-label="Site">
+    <a class="brand landing-brand" href="/" aria-label="BizNova home"><svg class="brand-mark" width="34" height="34" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M4 25V7h9c8 0 8 9 1 9H9m5 0c9 0 9 9 0 9H4" stroke="currentColor" stroke-width="3.5"/><path d="m21 3 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z" fill="var(--accent)"/></svg><span>Biz<span class="brand-nova">Nova</span></span></a>
+    <div class="landing-nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      {% if current_user %}<a class="btn btn-primary btn-small" href="/">Open workspace {{ ui.icon('arrow') }}</a>
+      {% else %}<a href="/auth/login">Sign in</a><a class="btn btn-primary btn-small" href="/auth/login?next=/">Get started {{ ui.icon('arrow') }}</a>{% endif %}
+    </div>
+  </nav>
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <span class="hero-pill"><span class="status-dot"></span>Built for Indian small businesses</span>
+      <h1 id="hero-title">Stop running your shop from a <span class="hl">notebook.</span></h1>
+      <p class="hero-lede">BizNova brings stock, sales, purchases and expenses into one place — with a live view of what you sold and spent today.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary hero-cta" href="/auth/login?next=/">Open the workspace {{ ui.icon('arrow') }}</a>
+        <a class="btn btn-ghost hero-cta" href="#features">See what's inside</a>
+      </div>
+      {% if demo_mode %}<p class="hero-note">{{ ui.icon('info') }}This demo runs on fictional business data. No real customer details are stored.</p>{% endif %}
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="preview-card">
+        <div class="preview-head"><span class="preview-dots"><i></i><i></i><i></i></span><span>Overview</span><span class="preview-live"><span class="status-dot"></span>Live</span></div>
+        <div class="preview-grid">
+          <div class="preview-tile preview-tile-lime"><small>Sales revenue</small><div class="preview-bars"><i style="height:34%"></i><i style="height:52%"></i><i style="height:41%"></i><i style="height:68%"></i><i style="height:57%"></i><i style="height:82%"></i><i style="height:74%"></i></div></div>
+          <div class="preview-tile"><small>Inventory pulse</small><span class="preview-line"></span><span class="preview-line short"></span><span class="preview-line"></span></div>
+          <div class="preview-tile wide"><small>Recent activity</small><span class="preview-row"><i></i><span></span><b></b></span><span class="preview-row"><i></i><span></span><b></b></span><span class="preview-row"><i></i><span></span><b></b></span></div>
+        </div>
+      </div>
+      <span class="preview-caption">A product preview, not sample figures.</span>
+    </div>
+  </section>
+
+  <ul class="fact-strip" aria-label="What BizNova handles">
+    <li><strong>₹ INR native</strong><span>Whole-rupee and paise records</span></li>
+    <li><strong>Instant</strong><span>Stock updates with every sale</span></li>
+    <li><strong>Live</strong><span>Dashboard built from your ledger</span></li>
+    <li><strong>One owner</strong><span>Single secure workspace</span></li>
+  </ul>
+
+  <section class="features" id="features" aria-labelledby="features-title">
+    <p class="eyebrow">THE WORKSPACE</p>
+    <h2 id="features-title">Everything a growing shop needs. Nothing it doesn't.</h2>
+    <div class="feature-grid">
+      <article class="feature"><span class="feature-icon">{{ ui.icon('box') }}</span><h3>Inventory</h3><p>Every product, its stock and its alert level — always current, in whole units.</p></article>
+      <article class="feature"><span class="feature-icon">{{ ui.icon('sale') }}</span><h3>Sales records</h3><p>Multi-item sales with exact rupee totals, discounts and a saved receipt.</p></article>
+      <article class="feature"><span class="feature-icon">{{ ui.icon('purchase') }}</span><h3>Purchases</h3><p>Record a supplier bill and raise stock in the same step.</p></article>
+      <article class="feature"><span class="feature-icon">{{ ui.icon('expense') }}</span><h3>Expenses</h3><p>Rent, transport and utilities — categorised, audited and easy to review.</p></article>
+      <article class="feature"><span class="feature-icon">{{ ui.icon('report') }}</span><h3>Live dashboard</h3><p>Sales, spending and stock alerts, recalculated from your records as you work.</p></article>
+      <article class="feature"><span class="feature-icon">{{ ui.icon('alert') }}</span><h3>Low-stock alerts</h3><p>Know what to reorder before a shelf runs empty.</p></article>
+    </div>
+  </section>
+
+  <section class="how" id="how" aria-labelledby="how-title">
+    <div class="how-copy">
+      <p class="eyebrow">HOW IT WORKS</p>
+      <h2 id="how-title">From opening time to closing, in three moves.</h2>
+      <p class="muted">No setup marathon. Add what you sell, record what happens, and let the dashboard do the counting.</p>
+    </div>
+    <ol class="how-steps">
+      <li><span class="step-badge">01</span><div><h3>Add your products</h3><p>Name, SKU, unit and prices. Opening stock is recorded as a movement you can audit.</p></div></li>
+      <li><span class="step-badge">02</span><div><h3>Record the day</h3><p>Sales, purchases and expenses each update stock and totals in one transaction.</p></div></li>
+      <li><span class="step-badge">03</span><div><h3>Read the picture</h3><p>See revenue, spending, cash flow, top products and restock alerts at a glance.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="trust" aria-labelledby="trust-title">
+    <div>
+      <p class="eyebrow">BUILT CAREFULLY</p>
+      <h2 id="trust-title">Records you can stand behind.</h2>
+      <p class="muted">Money is stored as exact integer paise, never floating point. Every void keeps its original record and reason, and each change is written to an audit trail.</p>
+    </div>
+    <ul class="trust-list">
+      <li>{{ ui.icon('shield') }}<span>Single owner sign-in with session revocation</span></li>
+      <li>{{ ui.icon('check') }}<span>Atomic writes — stock and totals move together</span></li>
+      <li>{{ ui.icon('report') }}<span>Inclusive date filters and safe CSV exports</span></li>
+    </ul>
+  </section>
+
+  <section class="landing-cta">
+    <h2>Ready to trade the notebook for a clear view?</h2>
+    <p>Sign in to the workspace and record your first sale.</p>
+    <a class="btn btn-primary hero-cta" href="/auth/login?next=/">Open the workspace {{ ui.icon('arrow') }}</a>
+  </section>
+
+  <footer class="landing-footer">
+    <span>BizNova <span class="footer-divider">/</span> Business, made clearer.</span>
+    <span>Single-owner workspace · INR records · No payment gateway</span>
+  </footer>
+</div>
+{% endblock %}

@@ -11,8 +11,8 @@
   function readTheme() {
     try {
       const saved = localStorage.getItem(THEME_KEY);
-      return themes.includes(saved) ? saved : 'system';
-    } catch (_) { return root.dataset.themePreference || 'system'; }
+      return themes.includes(saved) ? saved : 'dark';
+    } catch (_) { return root.dataset.themePreference || 'dark'; }
   }
   function applyTheme(preference, persist = false) {
     if (!themes.includes(preference)) preference = 'system';

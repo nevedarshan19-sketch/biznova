@@ -32,7 +32,7 @@ def csrf_token(response):
 
 
 @pytest.mark.parametrize("path", [
-    "/", "/products", "/products/new", "/products/1", "/products/1/edit",
+    "/products", "/products/new", "/products/1", "/products/1/edit",
     "/sales", "/sales/new", "/sales/1", "/purchases", "/purchases/new",
     "/purchases/1", "/expenses", "/expenses/new", "/reports", "/reports/export/sales", "/settings",
 ])
@@ -40,6 +40,14 @@ def test_private_read_routes_require_login(client, path):
     response = client.get(path)
     assert response.status_code in (302, 303)
     assert urlsplit(response.headers["Location"]).path == "/auth/login"
+
+
+def test_public_landing_page_is_available_without_login(client):
+    response = client.get("/")
+    body = response.get_data(as_text=True)
+    assert response.status_code == 200
+    assert "Stop running your shop from a" in body
+    assert 'href="/auth/login?next=/"' in body
 
 
 @pytest.mark.parametrize("path", [

@@ -7,6 +7,7 @@ from app.security import login_required
 from app.services import expenses
 from app.services.clock import business_today
 from app.services.money import money_input
+from app.services.reports import expense_summary
 
 bp = Blueprint("expenses", __name__, url_prefix="/expenses")
 
@@ -23,7 +24,17 @@ def index():
     if request.args.get("status") in {"active", "voided"}:
         stmt = stmt.where(Expense.status == request.args["status"])
     pagination = db.paginate(stmt.order_by(Expense.business_date.desc(), Expense.id.desc()), page=page_number(), per_page=12, error_out=False)
-    return render_template("expenses/list.html", pagination=pagination, period=period, categories=db.session.scalars(select(Expense.category).distinct().order_by(Expense.category)).all())
+    today = business_today(g.business.timezone)
+    month_start = today.replace(day=1)
+    return render_template(
+        "expenses/list.html",
+        pagination=pagination,
+        period=period,
+        categories=db.session.scalars(select(Expense.category).distinct().order_by(Expense.category)).all(),
+        month=expense_summary(month_start, today),
+        month_start=month_start,
+        today=today,
+    )
 
 
 def expense_form(expense=None):
@@ -32,6 +43,8 @@ def expense_form(expense=None):
         result, errors, status = attempt(lambda: expenses.update_expense(expense, request.form, g.user.id) if expense else expenses.create_expense(request.form, g.user.id))
         if not errors:
             flash("Expense saved.", "success")
+            if request.form.get("return_to") == "list":
+                return redirect("/expenses", code=303)
             return redirect(f"/expenses/{result.id}", code=303)
         form = request.form
     elif expense:
